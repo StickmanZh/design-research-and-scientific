@@ -65,6 +65,7 @@ Modal findMode(map<double, int> hash) {
             newModal.modeNum++;
         }
     }
+    newModal.timesItAppears = largest.second;
 
     return newModal;
 }
@@ -84,16 +85,30 @@ Deviations findStandardDeviation(vector<double> dataSet, double mean) {
     Deviations newDeviation;
     newDeviation.sumDifferenceFromMeanSquared = 0;
 
-    for(int i = 0; i < dataSet.size() - 1; i++) {
+    for(int i = 0; i < dataSet.size(); i++) {
         newDeviation.differenceFromMean.push_back(dataSet[i] - mean);
         newDeviation.differenceFromMeanSquared.push_back(pow(newDeviation.differenceFromMean[i], 2));
         newDeviation.sumDifferenceFromMeanSquared += newDeviation.differenceFromMeanSquared[i];
     }
 
-    newDeviation.variance = (newDeviation.sumDifferenceFromMeanSquared / dataSet.size() - 1);
+    newDeviation.variance = (newDeviation.sumDifferenceFromMeanSquared / (dataSet.size() - 1));
     newDeviation.standardDeviation = sqrt(newDeviation.variance);
 
     return newDeviation;
+}
+
+void displayModal(Modal newModal) {
+    if(newModal.modeNum > 1) {
+        fout << "There are " << newModal.modeNum << " modes: ";
+        for(int i = 0; i < newModal.modes.size() - 1; i++) {
+            fout << newModal.modes[i] << ", ";
+        }
+        fout << newModal.modes[newModal.modes.size() - 1] << " they appear " << newModal.timesItAppears << " time(s) \n\n";
+
+
+    } else {
+        fout << "The mode is: " << newModal.modes[0] << ", it appears " << newModal.timesItAppears << " time(s) \n\n";
+    }
 }
 
 void displayValues(vector<double> dataSet, double mean, double median, Modal newModal, Deviations newDeviation) {
@@ -111,7 +126,7 @@ void displayValues(vector<double> dataSet, double mean, double median, Modal new
     fout << "The median is: " << median << "\n\n";
 
     //Display the mode
-    
+    displayModal(newModal);
 
     //Display the deviations;
     fout << "The standard deviation is: " << newDeviation.standardDeviation << "\n";
