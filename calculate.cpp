@@ -130,7 +130,8 @@ void displayValues(vector<double> dataSet, double mean, double median, Modal new
 
     //Display the deviations;
     fout << "The standard deviation is: " << newDeviation.standardDeviation << "\n";
-    fout << "The variance is: " << newDeviation.variance << "\n\n";
+    fout << "The variance is: " << newDeviation.variance << "\n";
+    fout << newDeviation.sumDifferenceFromMeanSquared;
 }
 
 int main() {
