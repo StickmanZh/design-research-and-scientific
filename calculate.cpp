@@ -84,13 +84,13 @@ Deviations findStandardDeviation(vector<double> dataSet, double mean) {
     Deviations newDeviation;
     newDeviation.sumDifferenceFromMeanSquared = 0;
 
-    for(int i = 0; i < dataSet.size() - 1; i++) {
+    for(int i = 0; i < dataSet.size(); i++) {
         newDeviation.differenceFromMean.push_back(dataSet[i] - mean);
         newDeviation.differenceFromMeanSquared.push_back(pow(newDeviation.differenceFromMean[i], 2));
         newDeviation.sumDifferenceFromMeanSquared += newDeviation.differenceFromMeanSquared[i];
     }
 
-    newDeviation.variance = (newDeviation.sumDifferenceFromMeanSquared / dataSet.size() - 1);
+    newDeviation.variance = (newDeviation.sumDifferenceFromMeanSquared / (dataSet.size() - 1));
     newDeviation.standardDeviation = sqrt(newDeviation.variance);
 
     return newDeviation;
@@ -115,7 +115,8 @@ void displayValues(vector<double> dataSet, double mean, double median, Modal new
 
     //Display the deviations;
     fout << "The standard deviation is: " << newDeviation.standardDeviation << "\n";
-    fout << "The variance is: " << newDeviation.variance << "\n\n";
+    fout << "The variance is: " << newDeviation.variance << "\n";
+    fout << newDeviation.sumDifferenceFromMeanSquared;
 }
 
 int main() {
