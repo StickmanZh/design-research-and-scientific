@@ -70,6 +70,21 @@ Modal findMode(map<double, int> hash) {
     return newModal;
 }
 
+struct Range {
+    double largest, smallest, range;
+};
+
+Range findRange(vector<double> dataSet) {
+    Range newRange;
+
+    sort(dataSet.begin(), dataSet.end());
+    newRange.range = dataSet[dataSet.size() - 1] - dataSet[0];
+    newRange.largest = dataSet[dataSet.size() - 1];
+    newRange.smallest = dataSet[0];
+
+    return newRange;
+}
+
 struct Deviations {
     double mean;
     vector<double> differenceFromMean;
@@ -97,27 +112,49 @@ Deviations findStandardDeviation(vector<double> dataSet, double mean) {
     return newDeviation;
 }
 
-void displayModal(Modal newModal) {
+void displayModal(Modal newModal, vector<double> dataSet) {
+    if(newModal.modeNum == dataSet.size()) {
+        fout << "There are no modes.\n\n";
+        return;
+    }
+
     if(newModal.modeNum > 1) {
         fout << "There are " << newModal.modeNum << " modes: ";
         for(int i = 0; i < newModal.modes.size() - 1; i++) {
             fout << newModal.modes[i] << ", ";
         }
         fout << newModal.modes[newModal.modes.size() - 1] << " they appear " << newModal.timesItAppears << " time(s) \n\n";
-
-
     } else {
         fout << "The mode is: " << newModal.modes[0] << ", it appears " << newModal.timesItAppears << " time(s) \n\n";
     }
 }
 
-void displayValues(vector<double> dataSet, double mean, double median, Modal newModal, Deviations newDeviation) {
+void displayStandardDeviation(Deviations newDeviation) {
+    fout << "The standard deviation is: " << newDeviation.standardDeviation << "\n";
+    fout << "The variance is: " << newDeviation.variance << "\n";
+    fout << "The sum of (difference from the mean)^2 is: " << newDeviation.sumDifferenceFromMeanSquared << "\n";
+    
+    fout << "The differences from the mean are: ";
+    for(int i = 0; i < newDeviation.differenceFromMean.size() - 1; i++) {
+        fout << newDeviation.differenceFromMean[i] << ", ";
+    }
+    fout << newDeviation.differenceFromMean[newDeviation.differenceFromMean.size() - 1] << "\n";
+
+    fout << "The differences from the mean^2 are: ";
+    for(int i = 0; i < newDeviation.differenceFromMeanSquared.size() - 1; i++) {
+        fout << newDeviation.differenceFromMeanSquared[i] << ", ";
+    }
+    fout << newDeviation.differenceFromMeanSquared[newDeviation.differenceFromMeanSquared.size() - 1] << "\n\n";
+}
+
+void displayValues(vector<double> dataSet, double mean, double median, Modal newModal, Range newRange, Deviations newDeviation) {
     //Display the data set
     fout << "The data set is: ";
     for(int i = 0; i < dataSet.size() - 1; i++) {
         fout << dataSet[i] << ", ";
     }
-    fout << dataSet[dataSet.size() - 1] << "\n\n";
+    fout << dataSet[dataSet.size() - 1] << "\n";
+    fout << "There are " << dataSet.size() << " values\n\n";
 
     //Display the mean
     fout << "The mean is: " << mean << "\n\n";
@@ -126,12 +163,14 @@ void displayValues(vector<double> dataSet, double mean, double median, Modal new
     fout << "The median is: " << median << "\n\n";
 
     //Display the mode
-    displayModal(newModal);
+    displayModal(newModal, dataSet);
+
+    //Display the range
+    fout << "The range is: " << newRange.range << "\n";
+    fout << "The largest value is: " << newRange.largest << ", the smallest value is: " << newRange.smallest << "\n\n";
 
     //Display the deviations;
-    fout << "The standard deviation is: " << newDeviation.standardDeviation << "\n";
-    fout << "The variance is: " << newDeviation.variance << "\n";
-    fout << newDeviation.sumDifferenceFromMeanSquared;
+    displayStandardDeviation(newDeviation);
 }
 
 int main() {
@@ -151,12 +190,14 @@ int main() {
 
     double mean, median;
     Modal newModal;
+    Range newRange;
     Deviations newDeviation;
 
     mean = findMean(dataSet);
     median = findMedian(dataSet);
     newModal = findMode(dataSetHash);
-    newDeviation = findStandardDeviation(dataSet, findMean(dataSet));
+    newRange = findRange(dataSet);
+    newDeviation = findStandardDeviation(dataSet, mean);
 
-    displayValues(dataSet, mean, median, newModal, newDeviation);
+    displayValues(dataSet, mean, median, newModal, newRange, newDeviation);
 }
