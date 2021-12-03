@@ -5,10 +5,11 @@
 #include <map>
 #include <utility>
 #include <algorithm>
+#include <string>
 using namespace std;
 
-ifstream fin("data.in");
-ofstream fout("data.out");
+ifstream fin("are-female-hurricanes-deadlier-than-male-hurricanes/data/data.in");
+ofstream fout("are-female-hurricanes-deadlier-than-male-hurricanes/data/data.out");
 
 double findMean(vector<double> dataSet) {
     double sum = 0, n = dataSet.size();
@@ -29,8 +30,8 @@ double findMedian(vector<double> dataSet) {
     if(dataSet.size() %2 != 0) {
         median = dataSet[floor(dataSet.size() / 2)];
     } else {
-        sum += dataSet[floor(dataSet.size() / 2)];
-        sum += dataSet[ceil(dataSet.size() / 2)];
+        sum += dataSet[dataSet.size() / 2];
+        sum += dataSet[(dataSet.size() / 2) - 1];
         median = (sum / 2);
     }
 
@@ -175,15 +176,54 @@ int main() {
     vector<double> dataSet;
     map<double, int> dataSetHash;
     double value;
+    char line[256];
+    string year = "", deaths = "";
 
-    while(fin >> value) {
-        dataSet.push_back(value);
+    for(int i = 0; i < 256; i++) {
+        line[i] = 0;
+    }
 
-        if(dataSetHash.find(value) == dataSetHash.end()) {
-            dataSetHash[value] = 1;
-        } else {
-            dataSetHash[value]++;
+    while(fin.getline(line, 256)) {
+        for(int i = 0; i < 256; i++) {
+            if(line[i] != 'F') {
+                continue;
+            } else if(line[i] == 'F' && line[i - 1] == ' ' && line[i + 1] == ' ') {
+
+                deaths += line[i + 7];
+
+                if(line[i + 8] == '0' || line[i + 8] == '1' || line[i + 8] == '2' || line[i + 8] == '3' || line[i + 8] == '4' || line[i + 8] == '5' || line[i + 8] == '6' || line[i + 8] == '7' || line[i + 8] == '8' || line[i + 8] == '9') {
+                    deaths += line[i + 8];
+                }
+
+                if(line[i + 9] == '0' || line[i + 9] ==  '1' || line[i + 9] == '2' || line[i + 9] == '3' || line[i + 9] == '4' || line[i + 9] == '5' || line[i + 9] == '6' || line[i + 9] == '7' || line[i + 9] ==  '8' || line[i + 9] == '9') {
+                    deaths += line[i + 9];
+                }
+
+                if(line[i + 10] == '0' || line[i + 10] ==  '1' || line[i + 10] == '2' || line[i + 10] == '3' || line[i + 10] == '4' || line[i + 10] == '5' || line[i + 10] == '6' || line[i + 10] == '7' || line[i + 10] ==  '8' || line[i + 10] == '9') {
+                    deaths += line[i + 10];
+                }
+
+                //fout << deaths << endl;
+
+                value = stod(deaths);
+
+                dataSet.push_back(value);
+
+                if(dataSetHash.find(value) == dataSetHash.end()) {
+                    dataSetHash[value] = 1;
+                } else {
+                    dataSetHash[value]++;
+                }
+
+                break;
+            }
         }
+
+        for(int i = 0; i < 256; i++) {
+            line[i] = 0;
+        }
+
+        deaths = "";
     }
 
     double mean, median;

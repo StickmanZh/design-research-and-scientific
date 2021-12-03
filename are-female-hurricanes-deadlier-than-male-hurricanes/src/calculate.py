@@ -139,6 +139,8 @@ def printValues(dataSet: list, dataSetSorted: list, mean: float, median: float, 
 
 def main():
     dataSetSorted = reader.readline().split(' ')
+
+    
     dataSetSorted = list(map(float, dataSetSorted))
     dataSet = dataSetSorted
     dataSetSorted.sort()
@@ -162,7 +164,7 @@ def main():
 
 if __name__ == "__main__":
     global reader, writer
-    reader = open('stats-function/data/input.txt', 'r')
+    reader = open('are-female-hurricanes-deadlier-than-male-hurricanes\data\data.txt', 'r')
     writer = open('stats-function/data/output.txt', 'w')
     main()
     reader.close()

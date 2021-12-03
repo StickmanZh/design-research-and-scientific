@@ -90,3 +90,5 @@ Ike F 2008 84
 Irene F 2011 41
 Isaac M 2012 5
 Sandy F 2012 159
+Katrina F 2005 1833
+Audrey F 1957 416
